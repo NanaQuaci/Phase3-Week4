@@ -36,7 +36,7 @@ pipeline {
                 allure([
                     includeProperties: false,
                     jdk: '',
-                    results: [[path: 'target/allure-results']]
+                    results: [[path: 'allure-results']]
                 ])
             }
         }
@@ -45,7 +45,7 @@ pipeline {
     post {
         always {
             echo 'Archiving Allure results and reports...'
-            archiveArtifacts artifacts: 'target/allure-results/**, target/allure-report/**', fingerprint: true
+            archiveArtifacts artifacts: 'allure-results/**', fingerprint: true
 
             script {
                 try {
