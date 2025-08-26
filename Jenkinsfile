@@ -1,10 +1,5 @@
 pipeline {
-    agent {
-        docker {
-            image 'selenium-cucumber-tests:latest'
-            reuseNode true
-        }
-    }
+    agent any
 
     tools {
         allure 'Allure_Report'
@@ -13,7 +8,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'main', url: 'https://github.com/NanaQuaci/Phase3-Week4-CucumberLab.git'
+                git branch: 'main', url: 'https://github.com/NanaQuaci/Phase3-Week4.git'
             }
         }
 
