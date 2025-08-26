@@ -28,9 +28,15 @@ public class DriverFactory {
             ChromeOptions options = new ChromeOptions();
             options.addArguments("--disable-save-password-bubble");
             options.addArguments("--disable-dev-shm-usage");
+            options.addArguments("--disable-popup-blocking");
+            options.addArguments("--disable-extensions");
+            options.addArguments("--disable-notifications");
             options.addArguments("--no-sandbox");
+            options.addArguments("--remote-allow-origins=*");
             options.setExperimentalOption("prefs", prefs);
-            options.addArguments("--user-data-dir=/tmp/chrome-" + System.currentTimeMillis());
+            options.addArguments("--headless=new");
+            options.addArguments("--window-size=1920,1080");
+            options.addArguments("--disable-gpu");
 
             driver = new ChromeDriver(options);
             driver.manage().window().maximize();
