@@ -23,9 +23,10 @@ pipeline {
             steps {
                 echo ">>> Running Cucumber tests inside Docker container"
                 sh '''
-                docker run --rm \
-                  -v $PWD/target:/app/target \
-                  selenium-cucumber-tests clean test
+                    docker run --rm \
+                    -v $WORKSPACE:/app \
+                    -w /app \
+                    selenium-cucumber-tests clean test
                 '''
             }
         }
