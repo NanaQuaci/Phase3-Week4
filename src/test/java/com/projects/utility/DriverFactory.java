@@ -26,8 +26,11 @@ public class DriverFactory {
             prefs.put("profile.password_manager_enabled", false);
 
             ChromeOptions options = new ChromeOptions();
-            options.setExperimentalOption("prefs", prefs);
             options.addArguments("--disable-save-password-bubble");
+            options.addArguments("--disable-dev-shm-usage");
+            options.addArguments("--no-sandbox");
+            options.setExperimentalOption("prefs", prefs);
+            options.addArguments("--user-data-dir=/tmp/chrome-" + System.currentTimeMillis());
 
             driver = new ChromeDriver(options);
             driver.manage().window().maximize();
