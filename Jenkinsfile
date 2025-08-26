@@ -21,18 +21,12 @@ pipeline {
 
         stage('Run Tests in Docker') {
             steps {
-                sh '''
                 echo ">>> Running Cucumber tests inside Docker container"
-
-                mvn clean test
+                sh '''
+                docker run --rm \
+                  -v $PWD/target:/app/target \
+                  selenium-cucumber-tests clean test
                 '''
-            }
-        }
-
-        stage('Generate Allure Report') {
-            steps {
-                echo ">>> Generating Allure Report"
-                sh 'mvn allure:report'
             }
         }
 
@@ -54,7 +48,6 @@ pipeline {
 
             script {
                 try {
-                    // Status mapping
                     def statusEmoji = ""
                     def statusText = ""
 
@@ -69,10 +62,8 @@ pipeline {
                         statusText = "failed"
                     }
 
-                    // Commit hash
                     def commitHash = env.GIT_COMMIT ? env.GIT_COMMIT.take(8) : "unknown"
 
-                    // Slack message
                     def message = "${statusEmoji} Selenium Cucumber Tests finished with status: ${statusText}\n" +
                                  ":package: Repo: ${env.JOB_NAME}\n" +
                                  ":link: Commit: ${commitHash}\n" +

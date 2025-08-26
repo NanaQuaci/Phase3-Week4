@@ -36,5 +36,7 @@ COPY src ./src
 RUN mkdir -p allure-results target/surefire-reports && \
     chmod -R 777 allure-results target/surefire-reports
 
+ENTRYPOINT ["mvn"]
+
 # Run tests by default
-CMD ["mvn", "clean", "test", "allure:report", "-Dmaven.test.failure.ignore=true"]
+CMD ["clean", "test", "allure:report", "-Dmaven.test.failure.ignore=true"]
