@@ -38,12 +38,14 @@ public class CartPage extends BasePage {
 
     public void removeItemFromCart() {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+
+        // Click "Remove"
         wait.until(ExpectedConditions.elementToBeClickable(removeFromCartButton)).click();
-        wait.until(ExpectedConditions.or(
-                ExpectedConditions.invisibilityOfElementLocated(cartBadge),
-                ExpectedConditions.textToBe(cartBadge, "")
-        ));
+
+        // Wait until "Add to cart" button comes back (product page behavior)
+        wait.until(ExpectedConditions.elementToBeClickable(addToCartButton));
     }
+
 
 
     public void goToCart() {
