@@ -62,7 +62,7 @@ pipeline {
         always {
             echo 'Archiving Allure results and Cucumber reports...'
             archiveArtifacts artifacts: 'allure-results/**', fingerprint: true
-            archiveArtifacts artifacts: 'target/cucumber-report/**', fingerprint: true
+            archiveArtifacts artifacts: 'target/cucumber.html', fingerprint: true
 
             script {
                 try {
