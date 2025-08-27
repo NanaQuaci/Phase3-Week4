@@ -44,10 +44,25 @@ pipeline {
         }
     }
 
+    stage('Generate Cucumber Report') {
+        steps {
+            echo ">>> Generating Cucumber HTML report"
+            sh '''
+                docker run --rm \
+                -v $WORKSPACE:/app \
+                -w /app \
+                selenium-cucumber-tests \
+                mvn cucumber:report
+            '''
+        }
+    }
+
+
     post {
         always {
-            echo 'Archiving Allure results and reports...'
+            echo 'Archiving Allure results and Cucumber reports...'
             archiveArtifacts artifacts: 'allure-results/**', fingerprint: true
+            archiveArtifacts artifacts: 'target/cucumber-report/**', fingerprint: true
 
             script {
                 try {
