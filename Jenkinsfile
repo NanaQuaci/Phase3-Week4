@@ -51,10 +51,23 @@ pipeline {
                         -v $WORKSPACE:/app \
                         -w /app \
                         selenium-cucumber-tests \
-                        mvn cucumber:report
+                        mvn verify
                     '''
                 }
             }
+
+        stage('Publish Cucumber Report') {
+            steps {
+                publishHTML(target: [
+                    allowMissing: false,
+                    alwaysLinkToLastBuild: true,
+                    keepAll: true,
+                    reportDir: 'target',
+                    reportFiles: 'cucumber.html',
+                    reportName: 'Cucumber HTML Report'
+                ])
+            }
+        }
     }
 
 
