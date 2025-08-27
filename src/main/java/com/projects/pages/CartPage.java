@@ -26,10 +26,12 @@ public class CartPage extends BasePage {
 
     public void addItemToCart() {
         driver.findElement(addToCartButton).click();
+        getCartBadgeCount();
     }
 
     public void removeItemFromCart() {
         driver.findElement(removeFromCartButton).click();
+        isCartBadgeGone();
     }
 
     public void goToCart() {
@@ -42,7 +44,11 @@ public class CartPage extends BasePage {
 
     public String getCartBadgeCount() {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        WebElement badge = wait.until(ExpectedConditions.visibilityOfElementLocated(cartBadge));
+        // Wait for the badge to be present and have non-empty text
+        WebElement badge = wait.until(driver -> {
+            WebElement e = driver.findElement(cartBadge);
+            return (!e.getText().isEmpty()) ? e : null;
+        });
         return badge.getText();
     }
 
@@ -51,7 +57,12 @@ public class CartPage extends BasePage {
     }
 
     public boolean isCartBadgeGone() {
-        return driver.findElements(cartBadge).isEmpty();
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        try {
+            return wait.until(ExpectedConditions.invisibilityOfElementLocated(cartBadge));
+        } catch (Exception e) {
+            return false;
+        }
     }
 
 }
