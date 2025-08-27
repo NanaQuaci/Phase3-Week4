@@ -42,19 +42,19 @@ pipeline {
                 ])
             }
         }
-    }
 
-    stage('Generate Cucumber Report') {
-        steps {
-            echo ">>> Generating Cucumber HTML report"
-            sh '''
-                docker run --rm \
-                -v $WORKSPACE:/app \
-                -w /app \
-                selenium-cucumber-tests \
-                mvn cucumber:report
-            '''
-        }
+        stage('Generate Cucumber Report') {
+                steps {
+                    echo ">>> Generating Cucumber HTML report"
+                    sh '''
+                        docker run --rm \
+                        -v $WORKSPACE:/app \
+                        -w /app \
+                        selenium-cucumber-tests \
+                        mvn cucumber:report
+                    '''
+                }
+            }
     }
 
 
