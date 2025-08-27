@@ -22,12 +22,14 @@ pipeline {
         stage('Run Tests in Docker') {
             steps {
                 echo ">>> Running Cucumber tests inside Docker container"
+                catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE'){
                 sh '''
                     docker run --rm \
-                    -v $WORKSPACE:/app \
+                    -v $WORKSPACE:/allure-results:/app/allure-results \
                     -w /app \
                     selenium-cucumber-tests clean test
                 '''
+                }
             }
         }
 
