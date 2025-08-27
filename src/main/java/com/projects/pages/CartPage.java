@@ -25,14 +25,18 @@ public class CartPage extends BasePage {
     }
 
     public void addItemToCart() {
-        driver.findElement(addToCartButton).click();
-        getCartBadgeCount();
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+        wait.until(ExpectedConditions.elementToBeClickable(addToCartButton)).click();
+        getCartBadgeCount(); // ensure badge appears
     }
 
+
     public void removeItemFromCart() {
-        driver.findElement(removeFromCartButton).click();
-        isCartBadgeGone();
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        wait.until(ExpectedConditions.elementToBeClickable(removeFromCartButton)).click();
+        wait.until(ExpectedConditions.invisibilityOfElementLocated(cartBadge));
     }
+
 
     public void goToCart() {
         driver.findElement(cartIcon).click();
@@ -44,13 +48,13 @@ public class CartPage extends BasePage {
 
     public String getCartBadgeCount() {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        // Wait for the badge to be present and have non-empty text
-        WebElement badge = wait.until(driver -> {
-            WebElement e = driver.findElement(cartBadge);
-            return (!e.getText().isEmpty()) ? e : null;
-        });
+        WebElement badge = wait.until(ExpectedConditions.visibilityOfElementLocated(cartBadge));
+
+        // Wait until badge has non-empty text
+        wait.until(driver -> !badge.getText().isEmpty());
         return badge.getText();
     }
+
 
     public void clickContinueShopping() {
         driver.findElement(continueShoppingButton).click();
@@ -64,5 +68,6 @@ public class CartPage extends BasePage {
             return false;
         }
     }
+
 
 }
