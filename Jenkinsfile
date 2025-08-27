@@ -25,7 +25,7 @@ pipeline {
                 catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE'){
                 sh '''
                     docker run --rm \
-                    -v $WORKSPACE:/allure-results:/app/allure-results \
+                    -v $WORKSPACE:/app \
                     -w /app \
                     selenium-cucumber-tests clean test
                 '''
