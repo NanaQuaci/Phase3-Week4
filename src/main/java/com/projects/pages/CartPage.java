@@ -10,7 +10,8 @@ public class CartPage extends BasePage {
     private final By removeFromCartButton = By.id("remove-sauce-labs-backpack");
     private final By cartIcon = By.className("shopping_cart_link");
     private final By cartItem = By.className("cart_item");
-    private final By cartBadge = By.className("shopping_cart_badge");
+//  private final By cartBadge = By.className("shopping_cart_badge");
+    private final By cartBadge = By.cssSelector("span[data-test='shopping-cart-badge']");
     private final By continueShoppingButton = By.id("continue-shopping");
 
     public CartPage(WebDriver driver) {
