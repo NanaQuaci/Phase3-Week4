@@ -8,6 +8,7 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 public class DriverFactory {
     private static WebDriver driver;
@@ -38,6 +39,8 @@ public class DriverFactory {
 //            options.addArguments("--headless=new");
             options.addArguments("--window-size=1920,1080");
             options.addArguments("--disable-gpu");
+            options.addArguments("--user-data-dir=/tmp/chrome-" + UUID.randomUUID());
+            options.addArguments("--profile-directory=Default");
 
 
             driver = new ChromeDriver(options);

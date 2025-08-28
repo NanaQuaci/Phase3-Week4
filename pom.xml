@@ -78,18 +78,6 @@
             <scope>test</scope>
         </dependency>
 
-        <dependency>
-            <groupId>net.masterthought</groupId>
-            <artifactId>cucumber-reporting</artifactId>
-            <version>5.10.0</version>
-        </dependency>
-
-<!--        <dependency>-->
-<!--            <groupId>org.apache.maven.plugins</groupId>-->
-<!--            <artifactId>maven-surefire-plugin</artifactId>-->
-<!--            <version>3.5.3</version>-->
-<!--        </dependency>-->
-
     </dependencies>
 
     <build>
@@ -115,32 +103,10 @@
                 <version>2.11.2</version>
             </plugin>
 
-<!--            <plugin>-->
-<!--                <groupId>org.codehaus.mojo</groupId>-->
-<!--                <artifactId>exec-maven-plugin</artifactId>-->
-<!--                <version>3.1.0</version>-->
-<!--                <executions>-->
-<!--                    <execution>-->
-<!--                        <id>generate-cucumber-html</id>-->
-<!--                        <phase>verify</phase>-->
-<!--                        <goals>-->
-<!--                            <goal>java</goal>-->
-<!--                        </goals>-->
-<!--                        <configuration>-->
-<!--                            <mainClass>net.masterthought.cucumber.ReportBuilder</mainClass>-->
-<!--                            <arguments>-->
-<!--                                <argument>${project.build.directory}/cucumber.json</argument>-->
-<!--                                <argument>${project.build.directory}/cucumber.html</argument>-->
-<!--                            </arguments>-->
-<!--                        </configuration>-->
-<!--                    </execution>-->
-<!--                </executions>-->
-<!--            </plugin>-->
-
             <plugin>
                 <groupId>net.masterthought</groupId>
                 <artifactId>maven-cucumber-reporting</artifactId>
-                <version>5.9.0</version>
+                <version>5.8.0</version>
                 <executions>
                     <execution>
                         <id>generate-cucumber-report</id>
