@@ -139,25 +139,24 @@
 
             <plugin>
                 <groupId>net.masterthought</groupId>
-                <artifactId>cucumber-reporting</artifactId>
-                <version>5.10.0</version>
+                <artifactId>maven-cucumber-reporting</artifactId>
+                <version>5.9.0</version>
                 <executions>
                     <execution>
-                        <id>cucumber-report</id>
+                        <id>generate-cucumber-report</id>
                         <phase>verify</phase>
                         <goals>
                             <goal>generate</goal>
                         </goals>
                         <configuration>
-                            <jsonFiles>
-                                <param>target/*.json</param>
-                            </jsonFiles>
-                            <outputDirectory>target</outputDirectory>
-                            <reportFileName>cucumber</reportFileName>
+                            <projectName>SwagLabs Automation</projectName>
+                            <outputDirectory>${project.build.directory}</outputDirectory>
+                            <cucumberOutput>${project.build.directory}/cucumber.json</cucumberOutput>
                         </configuration>
                     </execution>
                 </executions>
             </plugin>
+
 
 
         </plugins>
