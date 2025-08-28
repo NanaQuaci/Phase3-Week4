@@ -64,8 +64,6 @@ public class CartPage extends BasePage {
     public boolean isItemAdded() {
         try {
             WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-
-            // Wait only for the "Remove" button to appear
             return wait.until(driver -> {
                 return !driver.findElements(removeFromCartButton).isEmpty()
                         && driver.findElement(removeFromCartButton).isDisplayed();

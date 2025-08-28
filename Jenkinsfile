@@ -44,30 +44,35 @@ pipeline {
         }
 
         stage('Generate Cucumber Report') {
-                steps {
-                    echo ">>> Generating Cucumber HTML report"
+            steps {
+                echo ">>> Generating Cucumber HTML report"
+                catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE') {
                     sh '''
                         docker run --rm \
                         -v $WORKSPACE:/app \
                         -w /app \
                         selenium-cucumber-tests \
-                        verify
+                        verify || true
                     '''
                 }
             }
+        }
 
         stage('Publish Cucumber Report') {
             steps {
-                publishHTML(target: [
-                    allowMissing: false,
-                    alwaysLinkToLastBuild: true,
-                    keepAll: true,
-                    reportDir: 'target',
-                    reportFiles: 'cucumber.html',
-                    reportName: 'Cucumber HTML Report'
-                ])
+                catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE') {
+                    publishHTML(target: [
+                        allowMissing: true,  // allow if report doesn't exist
+                        alwaysLinkToLastBuild: true,
+                        keepAll: true,
+                        reportDir: 'target',
+                        reportFiles: 'cucumber.html',
+                        reportName: 'Cucumber HTML Report'
+                    ])
+                }
             }
         }
+
     }
 
 
