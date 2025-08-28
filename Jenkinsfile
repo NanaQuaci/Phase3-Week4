@@ -19,6 +19,17 @@ pipeline {
             }
         }
 
+        stage('Clean Workspace') {
+            steps {
+                echo ">>> Cleaning old Allure results"
+                sh '''
+                    rm -rf allure-results/*
+                    rm -rf target/allure-results/*
+                    rm -rf target/allure-report/*
+                '''
+            }
+        }
+
         stage('Run Tests in Docker') {
             steps {
                 echo ">>> Running Cucumber tests inside Docker container"
