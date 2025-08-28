@@ -1,10 +1,8 @@
 package com.projects.base;
 
-import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
-import org.openqa.selenium.Alert;
-import org.openqa.selenium.NoAlertPresentException;
 
 public abstract class BasePage {
     protected WebDriver driver;
@@ -17,6 +15,18 @@ public abstract class BasePage {
 
 
 
+    public void handleChromePasswordModal() {
+        try {
+            driver.switchTo().frame("credential_picker_iframe");
+            WebElement okButton = driver.findElement(By.id("submit"));
+            okButton.click();
+            System.out.println("Password modal dismissed successfully.");
+        } catch (Exception e) {
+            System.out.println("No password modal detected.");
+        } finally {
+            driver.switchTo().defaultContent();
+        }
+    }
 
 
 }

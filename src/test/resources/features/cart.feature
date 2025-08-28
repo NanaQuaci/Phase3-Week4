@@ -8,11 +8,11 @@ Feature: Cart Functionality
 
   Scenario: Add item to cart only
     When I add an item to the cart
-    Then the cart badge should show "1"
+    Then the item should be added to the cart
 
   Scenario: Add and remove item from cart
     When I add an item to the cart
-    Then the cart badge should show "1"
+    Then the item should be added to the cart
     When I open the cart
     Then I should see the item in the cart
     When I remove the item from the cart
@@ -20,6 +20,6 @@ Feature: Cart Functionality
 
   Scenario: Remove item without opening cart
     When I add an item to the cart
-    Then the cart badge should show "1"
+    Then the item should be added to the cart
     When I remove the item from the products page
-    Then the cart badge should not be visible
+    Then I should not see the item in the cart

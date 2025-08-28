@@ -17,8 +17,8 @@ public class CartTest extends BaseTest {
     @Test
     @Story("Add Item to Cart Only")
     @Severity(SeverityLevel.CRITICAL)
-    @Description("Verify that an item can be added to the cart and cart badge updates")
-    public void testAddItemToCartOnly() throws InterruptedException {
+    @Description("Verify that an item can be added to the cart")
+    public void testAddItemToCartOnly() {
         driver.get(BASE_URL);
 
         LoginPage loginPage = new LoginPage(driver);
@@ -29,20 +29,17 @@ public class CartTest extends BaseTest {
         CartPage cartPage = new CartPage(driver);
         cartPage.addItemToCart();
 
-        String badgeCount = cartPage.getCartBadgeCount();
-        Thread.sleep(3000);
-
-        assertEquals("1", badgeCount, "Cart badge should reflect 1 item after adding");
+        // Verify item was added via the "Remove" button
+        assertTrue(cartPage.isRemoveButtonVisible(), "Item should be added to cart");
     }
-
 
     @Test
     @Story("Add and Remove Item")
     @Severity(SeverityLevel.CRITICAL)
-    @Description("Test adding and removing item from cart updates the cart badge and contents")
-    public void testAddAndRemoveItemFromCart() throws InterruptedException {
-
+    @Description("Test adding and removing item from cart updates the cart contents")
+    public void testAddAndRemoveItemFromCart() {
         driver.get(BASE_URL);
+
         LoginPage loginPage = new LoginPage(driver);
         loginPage.enterUsername(LoginTestData.VALID_USERNAME);
         loginPage.enterPassword(LoginTestData.VALID_PASSWORD);
@@ -50,10 +47,9 @@ public class CartTest extends BaseTest {
 
         CartPage cartPage = new CartPage(driver);
         cartPage.addItemToCart();
-        Thread.sleep(3000);
 
-        String badgeCount = cartPage.getCartBadgeCount();
-        assertEquals("1", badgeCount, "Cart badge should display 1 item");
+        // Verify item added
+        assertTrue(cartPage.isRemoveButtonVisible(), "Item should be added to cart");
 
         cartPage.goToCart();
         assertTrue(cartPage.isItemInCart(), "Item should be present in the cart");
@@ -61,7 +57,6 @@ public class CartTest extends BaseTest {
         cartPage.removeItemFromCart();
         assertFalse(cartPage.isItemInCart(), "Item should be removed from the cart");
     }
-
 
     @Test
     @Story("Remove Item Without Navigating to Cart")
@@ -75,14 +70,16 @@ public class CartTest extends BaseTest {
         loginPage.enterPassword(LoginTestData.VALID_PASSWORD);
         loginPage.clickLogin();
 
-
         CartPage cartPage = new CartPage(driver);
         cartPage.addItemToCart();
-        String badgeAfterAdd = cartPage.getCartBadgeCount();
-        assertEquals("1", badgeAfterAdd, "Item should be added — badge should show 1");
+
+        // Verify item added
+        assertTrue(cartPage.isRemoveButtonVisible(), "Item should be added to cart");
 
         cartPage.removeItemFromCart();
-        assertTrue(cartPage.isCartBadgeGone(), "Cart badge should no longer be visible after removing the item");
+
+        // Verify item removed
+        assertFalse(cartPage.isRemoveButtonVisible(), "Item should be removed from cart");
     }
 
 

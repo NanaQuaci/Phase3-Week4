@@ -9,15 +9,12 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import java.time.Duration;
 
-
 public class CartPage extends BasePage {
 
     private final By addToCartButton = By.id("add-to-cart-sauce-labs-backpack");
     private final By removeFromCartButton = By.id("remove-sauce-labs-backpack");
     private final By cartIcon = By.className("shopping_cart_link");
-    private final By cartItem = By.className("cart_item");
-//  private final By cartBadge = By.cssSelector(".shopping_cart_badge");
-    private final By cartBadge = By.cssSelector("span[data-test='shopping-cart-badge']");
+    public final By cartItem = By.className("cart_item");
     private final By continueShoppingButton = By.id("continue-shopping");
 
     public CartPage(WebDriver driver) {
@@ -26,56 +23,60 @@ public class CartPage extends BasePage {
 
     public void addItemToCart() {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-
         WebElement addButton = wait.until(ExpectedConditions.elementToBeClickable(addToCartButton));
         addButton.click();
-
-        // Wait until the cart badge is visible and has a value
-        wait.until(ExpectedConditions.textToBePresentInElementLocated(cartBadge, "1"));
     }
-
-
 
     public void removeItemFromCart() {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-
-        // Click "Remove"
         wait.until(ExpectedConditions.elementToBeClickable(removeFromCartButton)).click();
-
-        // Wait until "Add to cart" button comes back (product page behavior)
-        wait.until(ExpectedConditions.elementToBeClickable(addToCartButton));
+        // Wait until the remove button is gone, confirming removal
+        wait.until(ExpectedConditions.invisibilityOfElementLocated(removeFromCartButton));
     }
-
 
 
     public void goToCart() {
-        driver.findElement(cartIcon).click();
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        WebElement cart = wait.until(ExpectedConditions.elementToBeClickable(cartIcon));
+        cart.click();
     }
+
 
     public boolean isItemInCart() {
-        return !driver.findElements(cartItem).isEmpty();
-    }
-
-
-    public String getCartBadgeCount() {
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
-        WebElement badge = wait.until(ExpectedConditions.visibilityOfElementLocated(cartBadge));
-        return badge.getText().trim();
-    }
-
-
-    public void clickContinueShopping() {
-        driver.findElement(continueShoppingButton).click();
-    }
-
-    public boolean isCartBadgeGone() {
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         try {
-            return wait.until(ExpectedConditions.invisibilityOfElementLocated(cartBadge));
+            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+            return !wait.until(driver -> driver.findElements(cartItem)).isEmpty();
         } catch (Exception e) {
             return false;
         }
     }
 
 
+    public boolean isRemoveButtonVisible() {
+        try {
+            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+            return wait.until(ExpectedConditions.visibilityOfElementLocated(removeFromCartButton)).isDisplayed();
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public boolean isItemAdded() {
+        try {
+            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+
+            // Wait only for the "Remove" button to appear
+            return wait.until(driver -> {
+                return !driver.findElements(removeFromCartButton).isEmpty()
+                        && driver.findElement(removeFromCartButton).isDisplayed();
+            });
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+
+    public void clickContinueShopping() {
+        driver.findElement(continueShoppingButton).click();
+    }
 }

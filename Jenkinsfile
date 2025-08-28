@@ -51,7 +51,7 @@ pipeline {
                         -v $WORKSPACE:/app \
                         -w /app \
                         selenium-cucumber-tests \
-                        mvn verify
+                        verify
                     '''
                 }
             }
