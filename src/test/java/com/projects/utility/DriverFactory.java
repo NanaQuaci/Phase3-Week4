@@ -3,19 +3,13 @@ package com.projects.utility;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.edge.EdgeOptions;
-
-import java.io.File;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import org.openqa.selenium.firefox.FirefoxOptions;
 import java.time.Duration;
 import java.util.*;
 
 public class DriverFactory {
     private static ThreadLocal<WebDriver> driver = new ThreadLocal<>();
     public static final String BASE_URL = "https://www.saucedemo.com/";
-    private static ThreadLocal<String> dataDir = new ThreadLocal<>();
 
     private DriverFactory() {
         // prevent instantiation
@@ -25,9 +19,6 @@ public class DriverFactory {
         if (driver.get() == null) {
             String browser = System.getenv("BROWSER");
             if (browser == null) browser = "chrome";
-
-//            String uniqueDir = "/tmp/" + browser + "-" + UUID.randomUUID();
-//            dataDir.set(uniqueDir);
 
             switch (browser.toLowerCase()) {
                 case "chrome":
@@ -49,31 +40,25 @@ public class DriverFactory {
                     chromeOptions.addArguments("--window-size=1920,1080");
                     chromeOptions.addArguments("--disable-gpu");
                     chromeOptions.addArguments("--headless=new");
-//                    chromeOptions.addArguments("--user-data-dir=" + uniqueDir);
-//                    chromeOptions.setExperimentalOption("prefs", chromePrefs);
 
                     driver.set(new org.openqa.selenium.chrome.ChromeDriver(chromeOptions));
                     break;
 
-                case "edge":
-                    WebDriverManager.edgedriver().setup();
+                case "firefox":
+                    WebDriverManager.firefoxdriver().setup();
 
-                    EdgeOptions edgeOptions = new EdgeOptions();
-                    edgeOptions.addArguments("--disable-notifications");
-                    edgeOptions.addArguments("--disable-extensions");
-                    edgeOptions.addArguments("--no-sandbox");
-                    edgeOptions.addArguments("--window-size=1920,1080");
-                    edgeOptions.addArguments("--headless=new");
-//                    edgeOptions.addArguments("--user-data-dir=" + uniqueDir);
+                    FirefoxOptions firefoxOptions = new FirefoxOptions();
+                    firefoxOptions.addArguments("--width=1920");
+                    firefoxOptions.addArguments("--height=1080");
+                    firefoxOptions.addArguments("--headless");
 
-                    driver.set(new org.openqa.selenium.edge.EdgeDriver(edgeOptions));
+                    driver.set(new org.openqa.selenium.firefox.FirefoxDriver(firefoxOptions));
                     break;
 
                 default:
                     throw new IllegalArgumentException("Unsupported browser: " + browser);
             }
 
-            driver.get().manage().window().maximize();
             driver.get().manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
         }
         return driver.get();
@@ -86,17 +71,8 @@ public class DriverFactory {
     public static void quitDriver() {
         if (driver.get() != null) {
             driver.get().quit();
-            try {
-                Files.walk(Paths.get(dataDir.get()))
-                        .sorted(Comparator.reverseOrder())
-                        .map(Path::toFile)
-                        .forEach(File::delete);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
         }
         driver.remove();
-        dataDir.remove();
     }
 }
 
