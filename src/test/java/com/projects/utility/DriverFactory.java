@@ -99,3 +99,6 @@ public class DriverFactory {
         dataDir.remove();
     }
 }
+
+
+// mvn clean test -Denv=local -Dbrowser=chrome

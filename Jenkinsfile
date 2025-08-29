@@ -68,7 +68,6 @@ pipeline {
                     mkdir -p allure-results/merged
                     cp -r allure-results/chrome/* allure-results/merged/
                     cp -r allure-results/firefox/* allure-results/merged/
-                    allure generate allure-results/merged -o allure-report --clean
                 '''
             }
         }
