@@ -10,34 +10,28 @@ Feature: Checkout Functionality
     And I navigate directly to the checkout page
 
   @smoke @checkout
-  Scenario: Successful Checkout
-    When I enter "John" as First Name
-    And I enter "Doe" as Last Name
-    And I enter "12345" as Postal Code
+  Scenario Outline: Successful Checkout
+    When I enter "<firstName>" as First Name
+    And I enter "<lastName>" as Last Name
+    And I enter "<postalCode>" as Postal Code
     And I continue checkout
     And I finish checkout
     Then I should see the order confirmation message
 
-  @negative @checkout
-  Scenario: Missing First Name
-    When I enter "" as First Name
-    And I enter "Doe" as Last Name
-    And I enter "12345" as Postal Code
-    And I continue checkout
-    Then I should see error "Error: First Name is required"
+    Examples:
+      | firstName | lastName | postalCode |
+      | John      | Doe      | 12345      |
 
   @negative @checkout
-  Scenario: Missing Last Name
-    When I enter "John" as First Name
-    And I enter "" as Last Name
-    And I enter "12345" as Postal Code
+  Scenario Outline: Checkout with missing required fields
+    When I enter "<firstName>" as First Name
+    And I enter "<lastName>" as Last Name
+    And I enter "<postalCode>" as Postal Code
     And I continue checkout
-    Then I should see error "Error: Last Name is required"
+    Then I should see error "<errorMessage>"
 
-  @negative @checkout
-  Scenario: Missing Postal Code
-    When I enter "John" as First Name
-    And I enter "Doe" as Last Name
-    And I enter "" as Postal Code
-    And I continue checkout
-    Then I should see error "Error: Postal Code is required"
+    Examples:
+      | firstName | lastName | postalCode | errorMessage                     |
+      |           | Doe      | 12345      | Error: First Name is required    |
+      | John      |          | 12345      | Error: Last Name is required     |
+      | John      | Doe      |            | Error: Postal Code is required   |

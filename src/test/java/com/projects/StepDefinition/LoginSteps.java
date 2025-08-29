@@ -6,6 +6,8 @@ import io.cucumber.java.en.*;
 import org.junit.jupiter.api.Assertions;
 import org.openqa.selenium.WebDriver;
 
+import static com.projects.testdata.LoginTestData.*;
+
 public class LoginSteps {
 
     private WebDriver driver;
@@ -16,8 +18,8 @@ public class LoginSteps {
         driver = DriverFactory.getDriver();
         DriverFactory.openBaseUrl();
         loginPage = new LoginPage(driver);
-        loginPage.enterUsername("standard_user");
-        loginPage.enterPassword("secret_sauce");
+        loginPage.enterUsername(VALID_USERNAME);
+        loginPage.enterPassword(VALID_PASSWORD);
         loginPage.clickLogin();
         Assertions.assertTrue(driver.getCurrentUrl().contains("inventory.html"),
                 "Login failed, not on inventory page");
@@ -32,8 +34,8 @@ public class LoginSteps {
 
     @When("I login with username {string} and password {string}")
     public void i_login_with_username_and_password(String username, String password) {
-        loginPage.enterUsername(username);
-        loginPage.enterPassword(password);
+        loginPage.enterUsername(VALID_USERNAME);
+        loginPage.enterPassword(VALID_PASSWORD);
         loginPage.clickLogin();
     }
 

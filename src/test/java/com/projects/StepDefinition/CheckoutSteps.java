@@ -89,4 +89,5 @@ public class CheckoutSteps{
         checkoutPage.navigateToCheckoutPage();
         checkoutPage.waitForCheckoutPageToLoad();
     }
+
 }

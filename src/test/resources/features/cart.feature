@@ -2,9 +2,7 @@
 Feature: Cart Functionality
 
   Background:
-    Given I am on the login page
-    When I login with username "standard_user" and password "secret_sauce"
-    Then I should be redirected to the inventory page
+    Given I am logged in with valid credentials
 
   Scenario: Add item to cart only
     When I add an item to the cart

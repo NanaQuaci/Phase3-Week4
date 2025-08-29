@@ -28,11 +28,6 @@ public class CheckoutPage extends BasePage {
 
 
     // Actions
-    public void goToCart() {
-        wait.until(ExpectedConditions.elementToBeClickable(cartIcon)).click();
-        wait.until(ExpectedConditions.visibilityOfElementLocated(cartPageContainer));
-    }
-
     public void clickCheckout() {
         WebElement checkout = wait.until(ExpectedConditions.presenceOfElementLocated(checkoutButton));
         ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", checkout);

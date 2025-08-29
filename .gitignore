@@ -37,6 +37,4 @@ build/
 
 ### Mac OS ###
 .DS_Store
-/src/test/java/com/projects/tests/
-/src/test/java/com/projects/tests/CartTest.java
-/src/test/java/com/projects/tests/LoginTest.java
+/allure-results

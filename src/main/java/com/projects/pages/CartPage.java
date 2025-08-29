@@ -15,7 +15,6 @@ public class CartPage extends BasePage {
     private final By removeFromCartButton = By.id("remove-sauce-labs-backpack");
     private final By cartIcon = By.className("shopping_cart_link");
     public final By cartItem = By.className("cart_item");
-    private final By continueShoppingButton = By.id("continue-shopping");
 
     public CartPage(WebDriver driver) {
         super(driver);
@@ -51,16 +50,6 @@ public class CartPage extends BasePage {
         }
     }
 
-
-    public boolean isRemoveButtonVisible() {
-        try {
-            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-            return wait.until(ExpectedConditions.visibilityOfElementLocated(removeFromCartButton)).isDisplayed();
-        } catch (Exception e) {
-            return false;
-        }
-    }
-
     public boolean isItemAdded() {
         try {
             WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
@@ -71,10 +60,5 @@ public class CartPage extends BasePage {
         } catch (Exception e) {
             return false;
         }
-    }
-
-
-    public void clickContinueShopping() {
-        driver.findElement(continueShoppingButton).click();
     }
 }
