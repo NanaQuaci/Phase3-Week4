@@ -23,9 +23,9 @@ pipeline {
             steps {
                 echo ">>> Cleaning old Allure results"
                 sh '''
-                    rm -rf allure-results/*
-                    rm -rf target/allure-results/*
-                    rm -rf target/allure-report/*
+                    sudo rm -rf allure-results/* || true
+                    sudo rm -rf target/allure-results/* || true
+                    sudo rm -rf target/allure-report/* || true
                 '''
             }
         }
