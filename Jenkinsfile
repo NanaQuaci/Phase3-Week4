@@ -30,17 +30,40 @@ pipeline {
             }
         }
 
-        stage('Run Tests in Docker') {
-            steps {
-                echo ">>> Running Cucumber tests inside Docker container"
-                catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE'){
-                sh '''
-                    docker run --rm \
-                    -v $WORKSPACE:/app \
-                    -w /app \
-                    selenium-cucumber-tests clean test
-                '''
+        stage('Run Tests in Parallel') {
+            parallel {
+                Chrome: {
+                    echo ">>> Running Cucumber tests inside Docker container (Chrome)"
+                    catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE') {
+                        sh '''
+                            docker run --rm -e BROWSER=chrome \
+                            -v $WORKSPACE/allure-results/chrome:/app/allure-results \
+                            -v $WORKSPACE:/app -w /app selenium-cucumber-tests clean test
+                        '''
+                    }
                 }
+                Firefox: {
+                    echo ">>> Running Cucumber tests inside Docker container (Firefox)"
+                    catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE') {
+                        sh '''
+                            docker run --rm -e BROWSER=firefox \
+                            -v $WORKSPACE/allure-results/firefox:/app/allure-results \
+                            -v $WORKSPACE:/app -w /app selenium-cucumber-tests clean test
+                        '''
+                    }
+                }
+            }
+        }
+
+        stage('Generate Allure Report') {
+            steps {
+                echo ">>> Merging Allure results and generating report"
+                sh '''
+                    mkdir -p allure-results/merged
+                    cp -r allure-results/chrome/* allure-results/merged/
+                    cp -r allure-results/firefox/* allure-results/merged/
+                    allure generate allure-results/merged -o allure-report --clean
+                '''
             }
         }
 
@@ -49,7 +72,7 @@ pipeline {
                 allure([
                     includeProperties: false,
                     jdk: '',
-                    results: [[path: 'allure-results']]
+                    results: [[path: 'allure-results/merged']]
                 ])
             }
         }
@@ -59,11 +82,7 @@ pipeline {
                 echo ">>> Generating Cucumber HTML report"
                 catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE') {
                     sh '''
-                        docker run --rm \
-                        -v $WORKSPACE:/app \
-                        -w /app \
-                        selenium-cucumber-tests \
-                        verify || true
+                        docker run --rm -v $WORKSPACE:/app -w /app selenium-cucumber-tests verify || true
                     '''
                 }
             }
@@ -73,7 +92,7 @@ pipeline {
             steps {
                 catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE') {
                     publishHTML(target: [
-                        allowMissing: true,  // allow if report doesn't exist
+                        allowMissing: true,
                         alwaysLinkToLastBuild: true,
                         keepAll: true,
                         reportDir: 'target',
@@ -83,9 +102,7 @@ pipeline {
                 }
             }
         }
-
     }
-
 
     post {
         always {

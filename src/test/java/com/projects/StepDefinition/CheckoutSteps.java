@@ -1,6 +1,5 @@
 package com.projects.StepDefinition;
 
-import com.projects.base.BaseTest;
 import com.projects.pages.CheckoutPage;
 import com.projects.utility.DriverFactory;
 import io.cucumber.java.en.*;

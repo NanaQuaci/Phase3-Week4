@@ -103,6 +103,7 @@
                 <version>2.11.2</version>
             </plugin>
 
+
             <plugin>
                 <groupId>net.masterthought</groupId>
                 <artifactId>maven-cucumber-reporting</artifactId>
@@ -117,7 +118,9 @@
                         <configuration>
                             <projectName>SwagLabs Automation</projectName>
                             <outputDirectory>${project.build.directory}</outputDirectory>
-                            <cucumberOutput>${project.build.directory}/cucumber.json</cucumberOutput>
+                            <jsonFiles>
+                                <param>${project.build.directory}/cucumber.json</param>
+                            </jsonFiles>
                         </configuration>
                     </execution>
                 </executions>

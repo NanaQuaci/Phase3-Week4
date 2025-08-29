@@ -23,6 +23,21 @@ RUN CHROME_DRIVER_VERSION=$(curl -sS chromedriver.storage.googleapis.com/LATEST_
     wget -q "https://chromedriver.storage.googleapis.com/$CHROME_DRIVER_VERSION/chromedriver_linux64.zip" -O /tmp/chromedriver.zip && \
     unzip /tmp/chromedriver.zip -d /usr/local/bin/ && rm /tmp/chromedriver.zip
 
+
+# Install Firefox
+RUN apt-get update && \
+    apt-get install -y firefox
+
+# Install geckodriver (latest release)
+RUN GECKO_VERSION=$(curl -s https://api.github.com/repos/mozilla/geckodriver/releases/latest \
+                     | grep '"tag_name":' | grep -oP '\d+\.\d+\.\d+') && \
+    wget -q "https://github.com/mozilla/geckodriver/releases/download/v$GECKO_VERSION/geckodriver-v$GECKO_VERSION-linux64.tar.gz" -O /tmp/geckodriver.tar.gz && \
+    tar -xzf /tmp/geckodriver.tar.gz -C /usr/local/bin/ && \
+    rm /tmp/geckodriver.tar.gz
+
+
+
+
 # Copy Maven project files
 COPY pom.xml .
 
