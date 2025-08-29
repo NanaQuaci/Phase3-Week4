@@ -32,25 +32,31 @@ pipeline {
 
         stage('Run Tests in Parallel') {
             parallel {
-                Chrome: {
-                    echo ">>> Running Cucumber tests inside Docker container (Chrome)"
-                    catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE') {
+                stage('Chrome'){
+                    steps{
+                        echo ">>> Running Cucumber tests inside Docker container (Chrome)"
+                        catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE') {
                         sh '''
-                            docker run --rm -e BROWSER=chrome \
-                            -v $WORKSPACE/allure-results/chrome:/app/allure-results \
-                            -v $WORKSPACE:/app -w /app selenium-cucumber-tests clean test
+                        docker run --rm -e BROWSER=chrome \
+                        -v $WORKSPACE/allure-results/chrome:/app/allure-results \
+                        -v $WORKSPACE:/app -w /app selenium-cucumber-tests clean test
                         '''
+                        }
                     }
                 }
-                Firefox: {
-                    echo ">>> Running Cucumber tests inside Docker container (Firefox)"
-                    catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE') {
+
+                stage('Firefox') {
+                    steps{
+                        echo ">>> Running Cucumber tests inside Docker container (Firefox)"
+                        catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE') {
                         sh '''
-                            docker run --rm -e BROWSER=firefox \
-                            -v $WORKSPACE/allure-results/firefox:/app/allure-results \
-                            -v $WORKSPACE:/app -w /app selenium-cucumber-tests clean test
+                        docker run --rm -e BROWSER=firefox \
+                        -v $WORKSPACE/allure-results/firefox:/app/allure-results \
+                        -v $WORKSPACE:/app -w /app selenium-cucumber-tests clean test
                         '''
+                        }
                     }
+
                 }
             }
         }
